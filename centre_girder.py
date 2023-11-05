@@ -18,6 +18,6 @@ def tmcg_calculator():
         tmcg=tmincg
     return tmcg
 tmcg=tmcg_calculator()
-print("tmcg",tmcg)
-print("hcg",hcg)
-print("ha",ha)
+print("thickness of centre girder tmcg",tmcg)
+print("height of centre girder hcg",hcg)
+print("actual height of centre girder ha",ha)

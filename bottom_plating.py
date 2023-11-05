@@ -24,8 +24,8 @@ def tB_calculator():
         else:
             tB = tB1
     if L < 90:
-        ttB = 1.9 * nf * a * math.sqrt(PB * k)
-        if ttB <= 10:
+        ttB1 = 1.9 * nf * a * math.sqrt(PB * k)
+        if ttB1 <= 10:
             tk = 1.5
         else:
             tk = 0.1 * ttB1 / math.sqrt(k)
@@ -34,5 +34,12 @@ def tB_calculator():
         tB = 1.9 * nf * a * math.sqrt(PB * k) + tk
     return tB
 tB=tB_calculator()
-print(tB)
+tFK=tB+2 #mm
 
+tFKGL=math.sqrt(L*k)
+if L>=50:
+    if tFK<=tFKGL:
+        print(" tFK olmadı beya kurala aykırı bir kere")
+    else:
+        print("oldu oldu",tFK)
+print(f"BOTTOM PLATİNG tFK {math.ceil(tFK)}")

@@ -1,4 +1,4 @@
-from centre_girder import *
+from Centre_Girder import *
 from coefficient_calculations import *
 import math
 
@@ -8,7 +8,7 @@ def tpf_calculator():
         tpf = 16
     return tpf
 tpf=tpf_calculator()
-print(tpf)
+print(f"the thickness of plate floor tpf",tpf)
 
 
 """manhole = input("Do you want to open manholes? (yes or no) ")
