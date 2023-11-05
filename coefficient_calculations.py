@@ -27,9 +27,21 @@ x=int(input(" which part of the ship do you want to process? \
 
 wave_type=int(input(" please tab 1,2 or 3 for the wave type  \
 ( 1 = heading waves , 2 = side waves 3= doesnt matter ): "))
+G = int(input("mass of cargo in the hold [t] ? NOTE:if you dont know please press 0"))
+V = int(input("volume of the hold [m³] (hatchways excluded)? NOTE:if you dont know please press 0 "))
+vessel_type=int(input("what type vessel ? (select 1 or 2)  1-dry cargo 2-tanker "))
+PC = int(input("What is the static cargo load? (if you dont know it exactly, please press 0): "))
 
 
-
+################## bu kısım centre girderdan alındı ################ sonradan çekecek şekilde ayarlayıp sil
+lcg=B
+hcg=350 + 45*lcg   #mm
+if hcg<600:
+    hcg=600
+ha=(hcg+99)//100*100
+hdb=(ha / 1000)
+#######################################################################################
+hc=D - hdb   # inner bottomdan alındı ####################################################
 
 loc=x/L
 class coefficients():
@@ -155,6 +167,35 @@ class other_coefficients():
             nf = None  # Handle other values of fs as needed
         return nf
 
+    def calculate_GV(self,G, V):
+        if G == 0 or V == 0:
+            x = 0.7
+        else:
+            x = G / V
+        return x
+
+    def calculate_F(self):
+        F = 0.11 * V0 / math.sqrt(L)
+        return F
+
+    def calculate_m(self):
+        F = other_coefficients().calculate_F()
+        m0 = 1.5 + F
+        if loc < 0.2:
+            m = m0 - 5 * (m0 - 1) * loc
+        elif 0.2 <= loc <= 0.7:
+            m = 1
+        elif loc < 0.7:
+            m = 1 + (m0 + 1) / 0.3 * (loc / 0.7)
+        else:
+            m = 1
+        return m
+
+    def calculate_av(self):
+        F=other_coefficients().calculate_F()
+        m = other_coefficients().calculate_m()
+        return F * m
+
 
 
 
@@ -199,6 +240,56 @@ class pressure():
         x= (10 * T + P0 * CF)
         return x
 
+    def calculate_Pi(self):
+        GV=other_coefficients().calculate_GV(G,V)
+        return 9.81 * GV * hc * (1 + av)
+
+    def calculate_P_inner(self):   # İNNER BOTOM DA KULLANILIYOR
+        if vessel_type == 1:
+            Pi=pressure().calculate_Pi()
+            Pd = 10 * (T - hc)  # p damaged
+            if Pi >= Pd:
+                Pinner = Pi  # P cargo
+            else:
+                Pinner = Pd
+        elif vessel_type == 2:
+            Pd = 10 * (T - hc)  # p damaged
+            h2 = D + 1 - hc  # hcg aslında hdb az yukarısına ayarladığında eklersin bir de mm olabilir m ye ayarla
+            P2 = 9.81 * h2
+            # P1=1   # bunun hesabı haddinden fazla karışık
+            if P2 >= Pd:
+                Pinner = P2
+            else:
+                Pinner = Pd
+        return Pinner
+
+    def calculate_PD(self):  #SHEER STRAKE HESABINDA
+        z = D  # z = vertical distance of the structure's load centre above base line [m]
+        H = D
+        PD1 = P0 * (20 * T) / ((10 + z - T) * H) * CD  # kN/m^2
+        PDmin1 = 16 * f
+        PDmin2 = 0.7 * P0
+        PDlist = [PD1, PDmin1, PDmin2]
+        PD = max(PDlist)
+        return PD
+
+    # PC static cargo load [kN/m2]  MİN 15  OLACAK
+    def calculate_PC(self,PC):
+        PC = int(input("What is the static cargo load? (if you dont know it exactly, please press 0): "))
+        if PC == 0:
+            h = int(input("What is the height of the tween decks? (if you dont know it exactly, please press 0):"))
+            PC = 7 * h
+            if h == 0:
+                PC = 15
+        if PC < 15:
+            PC = 15
+        return PC
+
+    def calculate_PL(self):
+        av=other_coefficients().calculate_av()
+        PL = PC * (1 + av)  # PL Load on cargo decks [kN/m2]
+        return PL
+
 nf = other_coefficients().calculate_nf(fs)  # Pass 'fs' when calling the method
 print("nf",nf)
 CRW=coefficients().calculate_CRW(RSA)
@@ -237,3 +328,21 @@ ZPL_SP=stress_calculations().calculate_ZPL_SP(ZLS)
 print("ZPL_SP",ZPL_SP)
 ZPLmax=stress_calculations().calculate_ZPLmax()
 print("ZPLmax",ZPLmax)
+GV = other_coefficients().calculate_GV(G, V)
+print("GV",GV)
+av=other_coefficients().calculate_av()
+print("av",av)
+m=other_coefficients().calculate_m()
+print("m",m)
+F=other_coefficients().calculate_F()
+print("F",F)
+Pi=pressure().calculate_Pi()
+print("Pi",Pi)
+Pinner=pressure().calculate_P_inner()
+print("P_inner", Pinner)
+PD=pressure().calculate_PD()
+print("PD",PD)
+PL=pressure().calculate_PL()
+print("PL",PL)
+PC=pressure().calculate_PC(PC)
+print("PC",PC)

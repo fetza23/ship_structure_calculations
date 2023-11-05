@@ -1,4 +1,4 @@
-from Centre_Girder import *
+from centre_girder import *
 from coefficient_calculations import *
 import math
 
