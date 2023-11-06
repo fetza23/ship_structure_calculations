@@ -126,12 +126,12 @@ class stress_calculations():
         return ZLS
 
     def calculate_ZPL_SP(self,ZLS): # SHELL PLATİNG İÇİN ZPL
-        XL = 55 / k
+        XL =0  # 55 / k        # math domain hatası oluyor 55/k yapınca  kökün içi negatif oluyor
         ZPL_SP = math.sqrt(Zperm - 3 * XL ** 2) - 0.89 * ZLS
         return ZPL_SP
 
     def calculate_ZPLmax(self):   # SHELL PLATİNG
-        XL = 55 / k                          # XL İŞİNE Bİ BAK
+        XL = 0  # 55 / k                          # XL İŞİNE Bİ BAK
         ZPLmax = math.sqrt((230 / k) ** 2 - 3 * XL ** 2) - 0.89 * ZLS
         return ZPLmax
 

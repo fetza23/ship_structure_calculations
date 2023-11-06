@@ -1,0 +1,26 @@
+
+from coefficient_calculations import *
+
+############# FOR TRANSVERSE ###############
+def calculate_ZL():
+    ZL=ZLB*((0.4*D-hdb)/(0.4*D))
+    return ZL
+ZL=calculate_ZL()
+def calculate_Zpr():
+    Zpr = Zperm - abs(ZL)
+    return Zpr
+Zpr=calculate_Zpr()
+print(Zpr)
+
+def calculate_PS_sidelong():
+    z = hdb + a  # side shell plating için olan z
+    x = (10 * (T - z) + P0 * CF * (1 + z / T))  # kN/m^2
+    return x
+PS_sl=calculate_PS_sidelong()
+
+def calculate_Wl_sl():
+    l=2.4 # nedenini bulamadım
+    Wl_sl=83/Zpr*m*a*l**2*PS_sl
+    return Wl_sl
+Wl_sl=calculate_Wl_sl()
+print(Wl_sl)
