@@ -21,7 +21,8 @@ fs = int(input("Please select one of the numbers 1 or 2 to choose framing system
 RSA=int(input("Estimated restricted service area? (answers must be one of (200,50,20) "))
 ReH=int(input(" What is the yield strength of your material (N/mm^2) \
                 (Note: please write 235 if your material is normal strength hull structural steel ): "))
-part=input("which part of ship length you are checking over?  ")
+part=input("which part of ship length you are checking over? \
+[1, shell plating, weather deck] [2, frames, deck beam] [3, web frame, stringer] ")
 x=int(input(" which part of the ship do you want to process? \
 (enter a value in meters, from the stern to the bow) ")) # m
 
@@ -195,6 +196,34 @@ class other_coefficients():
         F=other_coefficients().calculate_F()
         m = other_coefficients().calculate_m()
         return F * m
+    
+    
+    def calculate_ma(self): #3.A.4 #MAİN FRAME HESABINDA 9.A.2.1
+        l=3 # bunu kesin öğren
+        ma=00.204*a/l*(4-(a/l)**2)
+        return ma
+
+    def calculate_c(self): #MAİN FRAME HESABINDA 9.A.2.1
+        lKu,lKo=0,0   # if no brackets used c = 1
+        l=1            # bu l v lKlara bak
+        c=1-(lKu/l+0.4*lKo/l)
+        if c<0.6:
+            c=0.6
+        return c
+
+    def calculate_cr(self): #MAİN FRAME HESABINDA 9.A.2.1
+        s,l=0,3           # buna da bi bak , for wall sided ships , there is no curvature s/l=0
+        cr=1-2*s/l
+        if cr<0.75:
+            cr=0.75
+        return cr
+    def calculate_n(self):   #MAİN FRAME HESABINDA 9.A.2.1
+        if L<100:
+            n=0.9-0.0035*L
+        else:
+            n=0.55
+        return n
+
 
 
 
@@ -289,6 +318,10 @@ class pressure():
         av=other_coefficients().calculate_av()
         PL = PC * (1 + av)  # PL Load on cargo decks [kN/m2]
         return PL
+    
+    def calculate_Pe(self): # main frames hesabında
+        pass                 # aşırı karmaşık eklersin p ya ps ya da pe ye eşit olacak sen ps ye eşitledin şimdilik
+
 
 nf = other_coefficients().calculate_nf(fs)  # Pass 'fs' when calling the method
 print("nf",nf)
@@ -346,3 +379,5 @@ PL=pressure().calculate_PL()
 print("PL",PL)
 PC=pressure().calculate_PC(PC)
 print("PC",PC)
+ma=other_coefficients().calculate_ma()
+print("ma",ma)
