@@ -18,7 +18,7 @@ import main_particulars
 from main_particulars import *
 import math
 fs = int(input("Please select one of the numbers 1 or 2 to choose framing system (1 = transverse framing, 2 = longitudinal framing): "))
-RSA=int(input("Estimated restricted service area? (answers must be one of (200,50,20) "))
+RSA=int(input("Estimated restricted service area? (answers must be one of (200,50,20,2,1) or 1)unlimited service area,2)sheltered water service "))
 ReH=int(input(" What is the yield strength of your material (N/mm^2) \
                 (Note: please write 235 if your material is normal strength hull structural steel ): "))
 part=input("which part of ship length you are checking over? \
@@ -96,6 +96,20 @@ class coefficients():
         else:
             CD = 1
         return CD
+    def calculate_CRS(self,RSA):
+        if RSA == 200:
+            CRS = 0.95
+        elif RSA == 50:
+            CRS = 0.85
+        elif RSA == 20:
+            CRS = 0.80
+        elif RSA==2:
+            CRS=0.75
+        else:
+            CRS = 1
+        return CRS
+
+
 
 
 class stress_calculations():
@@ -339,6 +353,8 @@ CF=coefficients().calculate_CF(loc,CB)
 print("CF",CF)
 CD=coefficients().calculate_CD(loc)
 print("CD",CD)
+CRS=coefficients().calculate_CRS(RSA)
+print(CRS)
 ZLB=stress_calculations().calculate_ZLB(L)
 print("ZLB",ZLB)
 P0=pressure().calculate_P0()
