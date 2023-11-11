@@ -45,6 +45,13 @@ hdb=(ha / 1000)
 hc=D - hdb   # inner bottomdan alındı ####################################################
 
 loc=x/L
+def round_t(a):
+    decimal = a - int(a)
+    if decimal < 0.5:
+        return int(a) + 0.5
+    else:
+        return int(a) + 1
+
 class coefficients():
     def calculate_CRW(self,RSA):
         if RSA == 200:
@@ -179,7 +186,7 @@ class other_coefficients():
         elif fs == 2:
             nf = 0.83
         else:
-            nf = None  # Handle other values of fs as needed
+            nf = 1
         return nf
 
     def calculate_GV(self,G, V):

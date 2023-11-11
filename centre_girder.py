@@ -1,11 +1,16 @@
 
 from coefficient_calculations import *
 lcg=B
-hcg=350 + 45*lcg   #mm
 
-if hcg<600:
-    hcg=600
+def hcg_calculator():
+    hcg=350 + 45*lcg
+    if hcg<600:
+        hcg=600
+    return hcg
+hcg=hcg_calculator()
+print(f"height of centre girder hcg : {hcg}")
 ha=(hcg+99)//100*100
+print(f"actual height of centre girder ha : {ha}")
 
 
 def tmcg_calculator():
@@ -17,7 +22,7 @@ def tmcg_calculator():
     if tmcg <= tmincg:
         tmcg=tmincg
     return tmcg
-tmcg=tmcg_calculator()
+tmcg1=tmcg_calculator()
+tmcg=round_t(tmcg1)
 print("thickness of centre girder tmcg",tmcg)
-print("height of centre girder hcg",hcg)
-print("actual height of centre girder ha",ha)
+

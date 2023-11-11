@@ -1,6 +1,12 @@
 from coefficient_calculations import *
 from main_particulars import *
 
+def bB_calculator():
+    bB=800+5*L
+    return bB
+bB=bB_calculator()
+print(f"bottom plating breadth bB: {bB} ")
+
 def tB_calculator():
     if L >= 90:
         ttB1 = 18.3 * nf * a * math.sqrt(PB / ZPL)
@@ -33,13 +39,20 @@ def tB_calculator():
                 tk = 3
         tB = 1.9 * nf * a * math.sqrt(PB * k) + tk
     return tB
-tB=tB_calculator()
-tFK=tB+2 #mm
+tB1=tB_calculator()
+tB=round_t(tB1)
+print(f"bottom plating thickness tB: {tB} ")
 
-tFKGL=math.sqrt(L*k)
-if L>=50:
-    if tFK<=tFKGL:
-        print(" tFK olmadı beya kurala aykırı bir kere")
-    else:
-        print("oldu oldu",tFK)
-print(f"BOTTOM PLATİNG tFK {math.ceil(tFK)}")
+def calculate_tFPK():
+    tFPK = tB + 2  # mm
+    tFKGL = math.sqrt(L * k)
+    if L >= 50:
+        if tFPK <=tFKGL:
+            tFPK=tFKGL
+    return tFPK
+
+tFPK1=calculate_tFPK()
+tFPK=round_t(tFPK1)
+print(f"flat plate keel thickness tFK {tFPK}")
+
+
