@@ -19,15 +19,16 @@ x=[0]*len(y)
 plt.plot(x,y,color="r",label="center girder")
 plt.legend()
 ################ SIDE GIRDER ###################
-legend_added = False
-for i in loc_SG:
-    y = np.linspace(1, ha / 1000 + 1, 1000)
-    x = [i] * len(y)
-    if not legend_added:
-        plt.plot(x, y, color="k", label="side girder", linewidth=tsg / 5)
-        legend_added = True
-    else:
-        plt.plot(x, y, color="k", linewidth=tsg / 5)
+if 4.5<=B/2:
+    legend_added = False
+    for i in loc_SG:
+        y = np.linspace(1, ha / 1000 + 1, 1000)
+        x = [i] * len(y)
+        if not legend_added:
+            plt.plot(x, y, color="k", label="side girder", linewidth=tsg / 5)
+            legend_added = True
+        else:
+            plt.plot(x, y, color="k", linewidth=tsg / 5)
 
 ############ man hole #################
 if man_hole ==1:
