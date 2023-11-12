@@ -175,3 +175,18 @@ bBr=bBr_calculator()
 print("the breadth of brackets bBr",bBr)
 
 ####################################  INNER BOTTOM  ###################################
+
+def tinner_calculator():
+    P=Pinner
+    ttinner = 1.1 * a * math.sqrt(P * k)
+    if ttinner <= 10:
+        tKinner = 1.5
+    else:
+        tKinner = 0.1 * ttinner / math.sqrt(k)
+        if tKinner > 3:
+            tKinner = 3
+
+    return 1.1 * a * math.sqrt(P * k) + tKinner +2  # hoca ahşap kaplama yoksa +2 gibi bir şey dedi ona bi bakarsın sonra
+tinner = round_t(tinner_calculator())
+print("the thickenss of inner bottom tinner: ", tinner)
+print("pinner",Pinner)

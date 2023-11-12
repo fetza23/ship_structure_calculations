@@ -42,16 +42,16 @@ if hcg<600:
 ha=(hcg+99)//100*100
 hdb=(ha / 1000)
 #######################################################################################
-hc=D - hdb   # inner bottomdan alındı ####################################################
+hc=D - hdb # inner bottomdan alındı ####################################################
 
 loc=x/L
+
 def round_t(a):
     decimal = a - int(a)
     if decimal < 0.5:
         return int(a) + 0.5
     else:
         return int(a) + 1
-
 class coefficients():
     def calculate_CRW(self,RSA):
         if RSA == 200:
@@ -118,10 +118,9 @@ class coefficients():
 
 
 
-
 class stress_calculations():
     XL = 0
-    def calculate_ZLB(self,L):
+    def calculate_ZLB(self,L):  # bottom plating
         k=other_coefficients().calculate_k(ReH)
         if L < 90:
             ZLB = 12.6 * math.sqrt(L) / k
@@ -136,7 +135,7 @@ class stress_calculations():
             Zperm = 230 / k
         return Zperm
 
-    def calculate_ZPL(self):
+    def calculate_ZPL(self):  # bottom plating
         XL = 0
         Zperm=stress_calculations().calculate_Zperm()
         ZPL = math.sqrt(Zperm ** 2 - 3 * XL ** 2) - 0.89 * ZLB
@@ -217,8 +216,8 @@ class other_coefficients():
         F=other_coefficients().calculate_F()
         m = other_coefficients().calculate_m()
         return F * m
-    
-    
+
+
     def calculate_ma(self): #3.A.4 #MAİN FRAME HESABINDA 9.A.2.1
         l=3 # bunu kesin öğren
         ma=00.204*a/l*(4-(a/l)**2)
@@ -294,17 +293,17 @@ class pressure():
         GV=other_coefficients().calculate_GV(G,V)
         return 9.81 * GV * hc * (1 + av)
 
-    def calculate_P_inner(self):   # İNNER BOTOM DA KULLANILIYOR
+    def calculate_P_inner(self):
         if vessel_type == 1:
             Pi=pressure().calculate_Pi()
-            Pd = 10 * (T - hc)  # p damaged
+            Pd = 10 * (T - hdb)  # p damaged
             if Pi >= Pd:
                 Pinner = Pi  # P cargo
             else:
                 Pinner = Pd
         elif vessel_type == 2:
-            Pd = 10 * (T - hc)  # p damaged
-            h2 = D + 1 - hc  # hcg aslında hdb az yukarısına ayarladığında eklersin bir de mm olabilir m ye ayarla
+            Pd = 10 * (T - hdb)
+            h2 = hc +1 # bu +1 firar borusu yüzünden konuldu
             P2 = 9.81 * h2
             # P1=1   # bunun hesabı haddinden fazla karışık
             if P2 >= Pd:
@@ -339,7 +338,7 @@ class pressure():
         av=other_coefficients().calculate_av()
         PL = PC * (1 + av)  # PL Load on cargo decks [kN/m2]
         return PL
-    
+
     def calculate_Pe(self): # main frames hesabında
         pass                 # aşırı karmaşık eklersin p ya ps ya da pe ye eşit olacak sen ps ye eşitledin şimdilik
 
