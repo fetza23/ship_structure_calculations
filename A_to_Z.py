@@ -333,3 +333,41 @@ def calculate_tss():
 tss=calculate_tss()
 print("thickness of sheer strake tss: ", tss)
 
+##################### SIDE FRAMES ( HOLD FRAMES ) #####################
+if fs==1:
+    l = (D / 3)
+    round_t(l)
+    print("l",l)
+    f=other_coefficients().calculate_f(2)
+    n=other_coefficients().calculate_n()
+    c=other_coefficients().calculate_c()
+    cr=other_coefficients().calculate_cr()
+    z=l/2
+    PS = pressure().calculate_PS(z)
+
+    def calculate_WRmf():
+        WR=(1-ma**2)*n*c*a*l**2*PS*cr*k
+        return WR
+    WR=calculate_WRmf()
+    print("side frame's WR",WR)
+
+##################### SIDE LONGİTUDİNALS #####################
+if fs==2:
+    def calculate_ZL():
+        ZL = ZLB * ((0.4 * D - hdb) / (0.4 * D))
+        return ZL
+
+    ZL = calculate_ZL()
+    def calculate_Zpr():
+        Zpr = Zperm - abs(ZL)
+        return Zpr
+    Zpr = calculate_Zpr()
+    z = hdb + a
+    PS = pressure().calculate_PS(z)
+    def calculate_Wl_sl():
+        l = e
+        Wl_sl = 83 / Zpr * m * a * l ** 2 * PS
+        return Wl_sl
+
+    Wl_sl = calculate_Wl_sl()
+    print(Wl_sl)

@@ -1,19 +1,4 @@
-"""import math
-from main_particulars import *
-ReH=int(input(" What is the yield strength of your material (N/mm^2) \
-                (Note: please write 235 if your material is normal strength hull structural steel ): "))
-fs = int(input(" please select one of the numbers 1 or 2 to choose framing system \
-             ( 1 = transverse framing , 2 = longitudinal framing): "))
-RSA=int(input("Estimated restricted service area? (answers must be one of (200,50,20) "))
 
-
-
-
-G=int(input("mass of cargo in the hold [t] ? NOTE:if you dont know please press 0"))
-V=int(input("volume of the hold [m³] (hatchways excluded)? NOTE:if you dont know please press 0 "))
-
-vessel_type=int(input("what type vessel ? (select 1 or 2)  1-dry cargo 2-tanker "))
-"""
 import main_particulars
 from main_particulars import *
 import math
