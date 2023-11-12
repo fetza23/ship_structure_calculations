@@ -31,7 +31,7 @@ wave_type=int(input(" please tab 1,2 or 3 for the wave type  \
 G = int(input("mass of cargo in the hold [t] ? NOTE:if you dont know please press 0"))
 V = int(input("volume of the hold [m³] (hatchways excluded)? NOTE:if you dont know please press 0 "))
 vessel_type=int(input("what type vessel ? (select 1 or 2)  1-dry cargo 2-tanker "))
-PC = int(input("What is the static cargo load? (if you dont know it exactly, please press 0): "))
+PCq = int(input("What is the static cargo load? (if you dont know it exactly, please press 0): "))
 
 
 ################## bu kısım centre girderdan alındı ################ sonradan çekecek şekilde ayarlayıp sil
@@ -49,7 +49,8 @@ loc=x/L
 def round_t(a):
     decimal = a - int(a)
     if decimal < 0.5:
-        return int(a) + 0.5
+        if decimal!=0:
+            return int(a) + 0.5
     else:
         return int(a) + 1
 class coefficients():
@@ -146,12 +147,12 @@ class stress_calculations():
         return ZLS
 
     def calculate_ZPL_SP(self,ZLS): # SHELL PLATİNG İÇİN ZPL
-        XL =0  # 55 / k        # math domain hatası oluyor 55/k yapınca  kökün içi negatif oluyor
-        ZPL_SP = math.sqrt(Zperm - 3 * XL ** 2) - 0.89 * ZLS
+        XL =55 / k
+        ZPL_SP = math.sqrt(Zperm**2 - 3 * XL ** 2) - 0.89 * ZLS
         return ZPL_SP
 
     def calculate_ZPLmax(self):   # SHELL PLATİNG
-        XL = 0  # 55 / k                          # XL İŞİNE Bİ BAK
+        XL =55 / k
         ZPLmax = math.sqrt((230 / k) ** 2 - 3 * XL ** 2) - 0.89 * ZLS
         return ZPLmax
 
@@ -259,29 +260,17 @@ class pressure():
     CF = coefficients().calculate_CF(loc, CB)
 
     def calculate_P0(self):
-        if wave_type == 1:
-            P0 = 2.1 * (CB + 0.7) * C0 * CL * f
-        elif wave_type == 2:
-            P0 = 2.6 * (CB + 0.7) * CL * C0
-        else:
-            P0 = 2.1 * (CB + 0.7) * C0 * CL * f
+        P0 = 2.1 * (CB + 0.7) * C0 * CL * f
         return P0
 
     def calculate_P01(self):
-        if fs == 1:
-            P01 = 2.1 * (CB + 0.7) * C0 * CL * f
-        else:
-            P01 = 1  # sallama
+        P01 = 2.6 * (CB + 0.7) * CL * C0
         return P01
-
-    def calculate_PS(self):
-        z = main_particulars.B / 2 + main_particulars.a / 2   # side shell plating için olan z
+    def calculate_PS(self,z):
         x = (10 * (T - z) + P0 * CF * (1 + z / T))  # kN/m^2
         return x
 
-    def calculate_PS1(self):
-        y=main_particulars.B/2
-        z = main_particulars.B / 2 + main_particulars.a / 2   # side shell plating için olan z
+    def calculate_PS1(self,z,y):
         x = (10 * (T - z) + P01*(1 + z / T * (2 - z / T)) * 2 * abs(y) / B)
         return x
 
@@ -312,9 +301,7 @@ class pressure():
                 Pinner = Pd
         return Pinner
 
-    def calculate_PD(self):  #SHEER STRAKE HESABINDA
-        z = D  # z = vertical distance of the structure's load centre above base line [m]
-        H = D
+    def calculate_PD(self,z,H):  #SHEER STRAKE HESABINDA
         PD1 = P0 * (20 * T) / ((10 + z - T) * H) * CD  # kN/m^2
         PDmin1 = 16 * f
         PDmin2 = 0.7 * P0
@@ -335,7 +322,6 @@ class pressure():
         return PC
 
     def calculate_PL(self):
-        av=other_coefficients().calculate_av()
         PL = PC * (1 + av)  # PL Load on cargo decks [kN/m2]
         return PL
 
@@ -367,10 +353,11 @@ P0=pressure().calculate_P0()
 print("P0",P0)
 P01=pressure().calculate_P01()
 print("P01",P01)
-PS1=pressure().calculate_PS1()
+
+"""PS1=pressure().calculate_PS1()
 print("PS1",PS1)
 PS=pressure().calculate_PS()
-print("PS",PS)
+print("PS",PS)"""
 PB=pressure().calculate_PB()
 print("PB",PB)
 ZPL=stress_calculations().calculate_ZPL()
@@ -395,11 +382,11 @@ Pi=pressure().calculate_Pi()
 print("Pi",Pi)
 Pinner=pressure().calculate_P_inner()
 print("P_inner", Pinner)
-PD=pressure().calculate_PD()
-print("PD",PD)
+"""PD=pressure().calculate_PD()
+print("PD",PD)"""
+PC=pressure().calculate_PC(PCq)
+print("PC",PC)
 PL=pressure().calculate_PL()
 print("PL",PL)
-PC=pressure().calculate_PC(PC)
-print("PC",PC)
 ma=other_coefficients().calculate_ma()
 print("ma",ma)

@@ -190,3 +190,146 @@ def tinner_calculator():
 tinner = round_t(tinner_calculator())
 print("the thickenss of inner bottom tinner: ", tinner)
 print("pinner",Pinner)
+
+"""
+##################### BRACKET FLOORS ##############################
+if fs==1:
+    pass
+
+############################# BOTTOM LONG. ######################
+if fs==2:
+    P=PB
+    ZL=ZLB*((0.4*D-hdb)/(0.4*D))
+    Zpr=Zperm-abs(ZL)
+    l=e
+    mk=1 # we assumed that there are no brackets
+    m=mk**2-ma**2
+    def calculate_Wl_bl():
+        Wl_bl=83/Zpr*m*a*l**2*P
+        return Wl_bl
+    Wl_bl=calculate_Wl_bl()
+    print("Wl_bl",Wl_bl)
+    
+######################## İNNER BOTTOM LONG . #######################
+if fs == 2:
+    P = Pinner
+    ZL = ZLB * ((0.4 * D - hdb) / (0.4 * D))
+    Zpr = Zperm - abs(ZL)
+    l = e
+    def calculate_Wl_ibl():
+        Wl = 83 / Zpr * m * a * l ** 2 * e * P
+        return Wl
+    Wl_ibl = calculate_Wl_ibl()
+
+"""
+########################### SHELL PLATİNG #########################
+
+z=hdb+a/2
+PS=pressure().calculate_PS(z)
+PS1=pressure().calculate_PS1(z,B/2)
+def ts_calculator():
+    if L < 90:
+        ts = 1.9 * nf * a * math.sqrt(PS * k) + k
+        if L < 50:  # last check for min
+            ts1 = (1.5 - 0.01 * L) * math.sqrt(L * k)
+            if ts <= ts1:
+                ts = ts1
+        else:
+            ts1 = math.sqrt(L * k)
+            if ts <= ts1:
+                ts = ts1
+
+    elif L >= 90:
+
+        ttS1 = 18.3 * nf * a * math.sqrt(PS / ZPL_SP)
+        if ttS1 <= 10:
+            tKs1 = 1.5
+        else:
+            tKs1 = 0.1 * ttS1 / math.sqrt(k)
+            if tKs1 > 3:
+                tKs1 = 3
+        ts1 = ttS1 + tKs1
+        P=PS # 4.B.2 DEN P YA PS YE YA DA PE YE EŞİT OLACAK FALAN DİYOR ONU AYARLA
+        ttS2 = 1.21 * a * math.sqrt(P * k)
+        if ttS2 <= 10:
+            tKs2 = 1.5
+        else:
+            tKs2 = 0.1 * ttS2 / math.sqrt(k)
+            if tKs2 > 3:
+                tKs2 = 3
+        ts2 =ttS2+ tKs2
+
+        ttS3 = 18.3 * nf * a * math.sqrt(PS1 / (ZPLmax))
+        if ttS3 <= 10:
+            tKs3 = 1.5
+        else:
+            tKs3 = 0.1 * ttS3 / math.sqrt(k)
+            if tKs3 > 3:
+                tKs3 = 3
+        ts3 =ttS3 + tKs3
+        tslist = [ts1, ts2, ts3]
+        ts = max(tslist)
+        ts11 = math.sqrt(L * k)
+        if ts11 > ts:
+            ts = ts11
+        print(tslist)
+    return ts
+ts=ts_calculator()
+print("the thickness of shell plate ts",ts)
+
+##################### DECK PLATİNG  #####################
+
+z = H = D
+PD=pressure().calculate_PD(z,H)
+def calculate_tD():
+    tFKGL = math.sqrt(L * k)
+    ttE1 = 1.21 * a * math.sqrt(PD * k)
+    if ttE1 <= 10:
+        tKss = 1.5
+    else:
+        tKss = 0.1 * ttE1 / math.sqrt(k)
+        if tKss > 3:
+            tKss = 3
+    tE1 = 1.21 * a * math.sqrt(PD * k) + tKss
+
+    ttE2 = 1.1 * a * math.sqrt(PL * k)
+    if ttE2 <= 10:
+        tKss = 1.5
+    else:
+        tKss = 0.1 * ttE2 / math.sqrt(k)
+        if tKss > 3:
+            tKss = 3
+
+    tE2 = 1.1 * a * math.sqrt(PL * k) + tKss
+
+    tEmin = (5.5 + 0.02 * L) * math.sqrt(k)
+    tmin = (4.5 + 0.05 * L) * math.sqrt(k)
+    tcheck=math.sqrt(L*k)
+    tlist = [tE1, tE2, tEmin, tmin,tcheck]
+    print("te1",tE1)
+    print("te2",tE2)
+    print("temin",tEmin)
+    print("tmin",tmin)
+    print("tcheck",tcheck)
+    tD = max(tlist)
+    if tD < tFKGL:
+        tD = tFKGL
+    return tD
+
+tD=calculate_tD()
+print("thickness of deck plating tD: ",tD)
+
+##################### SHEER STRAKE ######################
+def calculate_bss():
+    bss = 800 + 5 * L  # mm
+    return bss
+bss=calculate_bss()
+print("breadth of sheer strake bss:", bss)
+def calculate_tss():
+    tss = 0.5 * (tD + ts)
+    if tss < ts:
+        tss = ts
+    return tss
+tss=calculate_tss()
+print("thickness of sheer strake tss: ", tss)
+
