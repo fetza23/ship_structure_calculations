@@ -50,8 +50,8 @@ def calculate_tFPK():
             tFPK=tFKGL
     return tFPK
 
-tFPK1=calculate_tFPK()
-tFPK=round_t(tFPK1)
+tFPK=calculate_tFPK()
+
 print(f"flat plate keel thickness tFK {tFPK}")
 
 #################################### CENTRE GİRDER ####################################
