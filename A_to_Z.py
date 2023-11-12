@@ -5,7 +5,7 @@ def bB_calculator():
     bB=800+5*L
     return bB
 bB=bB_calculator()
-print(f"bottom plating breadth bB: {bB} ")
+print(f" breadth of flat plate keel bB: {bB} ")
 def tB_calculator():
     if L >= 90:
         ttB1 = 18.3 * nf * a * math.sqrt(PB / ZPL)
@@ -141,12 +141,9 @@ note that The distance y is not to be taken greater than {ymax} : "))
     else:
         Ɛ = 0.3
     Aw = Ɛ * T * LL * e * (1 - 2 * y_manhole / LL) * k
-    print("Aw",Aw)
 
     rwsa = ha * tpf / 100
-    print("RWSA",rwsa)
     Amh = rwsa - 40 * tpf / 10
-    print("AMH",Amh)
     if Amh >= Aw:
         print("a man hole may be opened")
         mh=1
@@ -306,11 +303,6 @@ def calculate_tD():
     tmin = (4.5 + 0.05 * L) * math.sqrt(k)
     tcheck=math.sqrt(L*k)
     tlist = [tE1, tE2, tEmin, tmin,tcheck]
-    print("te1",tE1)
-    print("te2",tE2)
-    print("temin",tEmin)
-    print("tmin",tmin)
-    print("tcheck",tcheck)
     tD = max(tlist)
     if tD < tFKGL:
         tD = tFKGL
