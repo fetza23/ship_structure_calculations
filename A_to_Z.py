@@ -325,41 +325,114 @@ def calculate_tss():
 tss=calculate_tss()
 print("thickness of sheer strake tss: ", tss)
 
-##################### SIDE FRAMES ( HOLD FRAMES ) #####################
-if fs==1:
-    l = (D / 3)
-    round_t(l)
-    print("l",l)
-    f=other_coefficients().calculate_f(2)
-    n=other_coefficients().calculate_n()
-    c=other_coefficients().calculate_c()
-    cr=other_coefficients().calculate_cr()
-    z=l/2
-    PS = pressure().calculate_PS(z)
+##################### SIDE FRAMES ( HOLD FRAMES ) and SIDE LONGİTUDİNALS  #####################
+def side_f_l():
+    if fs==1:
+        l = (D / 3)
+        round_t(l)
+        print("l",l)
+        f=other_coefficients().calculate_f(2)
+        n=other_coefficients().calculate_n()
+        c=other_coefficients().calculate_c()
+        cr=other_coefficients().calculate_cr()
+        z=l/2
+        PS = pressure().calculate_PS(z)
 
-    def calculate_WRmf():
-        WR=(1-ma**2)*n*c*a*l**2*PS*cr*k
-        return WR
-    WR=calculate_WRmf()
-    print("side frame's WR",WR)
+        def calculate_WRmf():
+            WR=(1-ma**2)*n*c*a*l**2*PS*cr*k
+            return WR
+        Ws_fl=calculate_WRmf()
+        print("section modulus for side frame Ws_fl",Ws_fl)
 
-##################### SIDE LONGİTUDİNALS #####################
-if fs==2:
-    def calculate_ZL():
-        ZL = ZLB * ((0.4 * D - hdb) / (0.4 * D))
-        return ZL
+    if fs==2:
+        def calculate_ZL():
+            ZL = ZLB * ((0.4 * D - hdb) / (0.4 * D))
+            return ZL
 
-    ZL = calculate_ZL()
-    def calculate_Zpr():
-        Zpr = Zperm - abs(ZL)
-        return Zpr
-    Zpr = calculate_Zpr()
-    z = hdb + a
-    PS = pressure().calculate_PS(z)
-    def calculate_Wl_sl():
-        l = e
-        Wl_sl = 83 / Zpr * m * a * l ** 2 * PS
-        return Wl_sl
+        ZL = calculate_ZL()
+        def calculate_Zpr():
+            Zpr = Zperm - abs(ZL)
+            return Zpr
+        Zpr = calculate_Zpr()
+        z = hdb + a
+        PS = pressure().calculate_PS(z)
+        def calculate_Wl_sl():
+            l = e
+            Wl_sl = 83 / Zpr * m * a * l ** 2 * PS
+            return Wl_sl
 
-    Wl_sl = calculate_Wl_sl()
-    print(Wl_sl)
+        Ws_fl = calculate_Wl_sl()
+        print("section modulus for side longitudinal Ws_fl",Ws_fl)
+    Ws_fl
+side_f_l()
+##################### DECK BEAMS and DECK LONGİTUDİNALS ##########################
+def deck_b_l():
+    mk = 1  # with no brackets assuption as a first approximation , hesabı baya zorlu
+    P = max(PL, PD)
+
+    if fs==1:
+        def calculate_Wd():
+            loc_DG=loc_SG+[0]
+            l=B/(len(loc_DG)-1)
+            ma = other_coefficients().calculate_ma(l)
+            m = mk ** 2 - ma ** 2
+            c=0.75  # for beams,girders and transverses simply supported on one or both ends , bi tane değeri de c=0.55 ama nedeni yok
+            Wd=m*c*a*P*l**2*k
+            return Wd
+        Wd_bl=calculate_Wd()
+        print("section modulus for deck beams Wd_bl",Wd_bl)
+
+
+    if fs==2:
+        ZLB=120 # as a firs approximation
+        ZLD=ZLB*((D-0.4*D)/(0.4*D))
+        ZL=ZLD
+        Zpr=Zperm-abs(ZL)
+        l=e
+        def calculate_Wl_dl():
+            Wl_dl=(83/Zpr)*m*a*l**2*P
+            return Wl_dl
+        Wd_bl=calculate_Wl_dl()
+        print("section modulus for deck longitudinals Wd_bl",Wd_bl)
+    return Wd_bl
+deck_b_l()
+
+"""###################################### DECK GİRDER and TRANSVERSE ####################################"""
+
+P=pressure().calculate_PD(D,D)*0.6 # bu f P0 da P0 da PD de hesaba katılması için
+print("P0",P0)
+print("PD",PD)
+print("P",P)
+loc_DG = loc_SG + [0]
+def calculate_W_dg():
+    l=2.4*6 #e*6 dedim iki bulkhead arası mesafe
+    print(l)
+    e = B / (len(loc_DG)+1)
+    print(e)
+    print("P",P)
+    W_dg=0.55*e*l**2*P*k
+    return W_dg
+W_dg=calculate_W_dg()
+print("section modulus of deck girder W_dg",W_dg)
+
+def calculate_W_dt():
+    l = B  # if there is no longitudinal bulkhead
+    print(l)
+    print(e)
+    print("P",P)
+    W_dt=0.55*e*l**2*P*k #e main particularsdan geldi
+    return W_dt
+W_dt=calculate_W_dt()
+print("section modulus of deck transverse W_dt",W_dt)
+
+#################### WEB FRAME ########################
+l=D-hdb
+nc=0.3  # cross tie sayısına bağlı olarak değişiyor , SİDE STRİNGER SAYISINA GÖRE DEĞİŞİYOR BORDADAKİ
+z = hdb + l / 2
+P= pressure().calculate_PS(z)*0.6
+print("P",P)
+def calculate_Wr_wf():
+    Wr_wf=0.55*e*l**2*P*nc*k
+    return Wr_wf
+Wr_wf=calculate_Wr_wf()
+print("Wr_wf",Wr_wf)

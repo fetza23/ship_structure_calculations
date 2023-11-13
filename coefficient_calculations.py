@@ -204,7 +204,7 @@ class other_coefficients():
         return F * m
 
 
-    def calculate_ma(self): #3.A.4 #MAİN FRAME HESABINDA 9.A.2.1
+    def calculate_ma(self,l): #3.A.4 #MAİN FRAME HESABINDA 9.A.2.1
         l=3 # bunu kesin öğren
         ma=00.204*a/l*(4-(a/l)**2)
         return ma
@@ -373,5 +373,5 @@ PC=pressure().calculate_PC(PCq)
 print("PC",PC)
 PL=pressure().calculate_PL()
 print("PL",PL)
-ma=other_coefficients().calculate_ma()
+ma=other_coefficients().calculate_ma(l=3)
 print("ma",ma)

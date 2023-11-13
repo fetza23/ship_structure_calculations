@@ -3,14 +3,31 @@ import matplotlib.pyplot as plt
 import numpy as np
 from A_to_Z import *
 ############### kabuk #####################
-x = np.linspace(-B/2, B/2,1000)
+"""x = np.linspace(-B/2, B/2,1000)
 y = [1]*(len(x))
 y[0],y[-1]=9,9
-
 plt.plot(x, y, color='green', linewidth=tFPK/5 , label="flat plate ") # /10 grafikte gözüksün diye
+"""
+############### bottom plating #################
+x = np.linspace(-B/2+bBr/1000, -B/2+bBr/1000,1000)
+y=[1]*len(x)
+plt.plot(x,y ,color="m", label="bottom plate")
+########### shell plating ###############
+y1 = np.linspace(1+bBr/1000,D,500)
+y2 = np.linspace(1+bBr/1000,D,500)
+x1=[B/2]*len(y1)
+x2=[-B/2]*len(y2)
+plt.plot(x1,y1 ,color="m", label="shell plate")
+plt.plot(x2,y2 ,color="m")
+#################bilge strake ##################
+
+
+
 ###########inner bottom ##################
+x = np.linspace(-B/2, B/2,1000)
 y=[ha/1000 +1]*len(x)
 plt.plot(x,y ,color="b", label="inner bottom")
+
 
 ############### centre girder ###################
 
