@@ -1,16 +1,10 @@
-# f=0.75 for frames
-from coefficient_calculations import *
-from main_particulars import *
-n=other_coefficients().calculate_n()
-print("n",n)
-c=other_coefficients().calculate_c()
-print("c",c)
-cr=other_coefficients().calculate_cr()
-print("cr",cr)
+def yuvarla_sayi(sayi):
+    if sayi % 100 >= 50:
+        return (sayi // 100 + 1) * 100
+    else:
+        return (sayi // 100) * 100 +50
 
-def calculate_WRmf():
-    l=3 # c ve ma hespalarında da 3 almıştık
-    WR=(1-ma**2)*n*c*l**2*PS*cr*k
-    return WR
-WR=calculate_WRmf()
-print("WR",WR)
+# Test
+sayi = int(input("Bir sayı girin: "))
+yuvarlanmis_sayi = yuvarla_sayi(sayi)
+print(f"{sayi} sayısı {yuvarlanmis_sayi} sayısına yuvarlandı.")
