@@ -2,13 +2,18 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-L = 120
-T = 5.820
-D=8.73
+L = 74
+B = 10.89
+T=4.737
+D=7.1
+w=L*B*T*0.68*1.025
 
-df = pd.read_excel("mrt.xlsx")
-WL05 = np.array([])
+
+df = pd.read_excel("yny.xlsx")
+print(df)
+
 if "WL0,3" in df.columns:
+    WL05 = np.array([])
     for i in df.index:
         if not pd.isna(df.loc[i, "WL0,3"]) and not pd.isna(df.loc[i, "WL1"]):
             x = (df.loc[i, "WL0,3"] * 5 + 2 * df.loc[i, "WL1"]) / 7
@@ -38,7 +43,21 @@ yeni_df = pd.concat(yeni_df_listesi, ignore_index=True)
 yeni_df = yeni_df.drop(columns=['postalar'])
 
 yeni_df = yeni_df.rename_axis("postalar")
+print(yeni_df)
+print(yeni_df.loc[70])
 
+print(yeni_df.columns[1:4])
+print(yeni_df.loc[0, "WL0"])
+print(yeni_df.loc[0, 'WL0,5'])
+print(yeni_df.loc[0,'WL1'])
+print(yeni_df.loc[74,'WL0'])
+print(yeni_df.loc[74,"WL0,5"])
+print(yeni_df.loc[74,'WL1'])
+print(yeni_df.loc[148, "WL0"])
+print(yeni_df.loc[148, 'WL0,5'])
+print(yeni_df.loc[148, 'WL1'])
+print("len yenidf",len(yeni_df))
+print("yeni_df.columns[1:4]",yeni_df.columns[1:4])
 
 
 
@@ -52,14 +71,19 @@ for i in range(len(yeni_df)):  # print(f"{i}. postanın wl1 e kadar olan alan",a
     liste_ps=pd.Series(liste)
     carpim=SM*liste_ps
     a=sum(carpim)
-    T=5.820
     b=2/3*T/4*a
     WL1Alan.append(b)
 WL1Alan_PDS=pd.Series(WL1Alan)
+print("WL1 0. POSTA ",WL1Alan_PDS.loc[0])
+print("WL1 74. POSTA ",WL1Alan_PDS.loc[74])
+print("WL1 148. POSTA ",WL1Alan_PDS.loc[148])
+
+
+
+
+SM=[1,4,1]
 
 WL2Alan=[]
-SM=[0.5,2,0.5]
-
 for i in range(len(yeni_df)):  # print(f"{i}. postanın wl2 e kadar olan alan",a)
     liste=[]
     for col in yeni_df[["WL0","WL1","WL2"]]:
@@ -67,10 +91,13 @@ for i in range(len(yeni_df)):  # print(f"{i}. postanın wl2 e kadar olan alan",a
     liste_ps=pd.Series(liste)
     carpim=SM*liste_ps
     a=sum(carpim)
-    T=5.820
     b=2/3*T/4*a
     WL2Alan.append(b)
 WL2Alan_PDS=pd.Series(WL2Alan)
+print("WL2 0. POSTA ",WL2Alan_PDS.loc[0])
+print("WL2 74. POSTA ",WL2Alan_PDS.loc[74])
+print("WL2 148. POSTA ",WL2Alan_PDS.loc[148])
+
 
 WL3Alan=[]
 SM=[0.5,2,1.5,4,1]
@@ -81,10 +108,12 @@ for i in range(len(yeni_df)):  # print(f"{i}. postanın wl3 e kadar olan alan",a
     liste_ps=pd.Series(liste)
     carpim=SM*liste_ps
     a=sum(carpim)
-    T = 5.820
     b=2/3*T/4*a
     WL3Alan.append(b)
 WL3Alan_PDS=pd.Series(WL3Alan)
+print("WL3 0. POSTA ",WL3Alan_PDS.loc[0])
+print("WL3 74. POSTA ",WL3Alan_PDS.loc[74])
+print("WL3 148. POSTA ",WL3Alan_PDS.loc[148])
 
 
 WL4Alan=[]
@@ -96,11 +125,12 @@ for i in range(len(yeni_df)):  #rint(f"{i}. postanın wl4 e kadar olan alan",a)
     liste_ps=pd.Series(liste)
     carpim=SM*liste_ps
     a=sum(carpim)
-    T = 5.820
     b=2/3*T/4*a
     WL4Alan.append(b)
 WL4Alan_PDS=pd.Series(WL4Alan)
-
+print("WL4 0. POSTA ",WL4Alan_PDS.loc[0])
+print("WL4 74. POSTA ",WL4Alan_PDS.loc[74])
+print("WL4 148. POSTA ",WL4Alan_PDS.loc[148])
 WL5Alan=[]
 SM=[0.5,2,1.5,4,2,4,1]
 for i in range(len(yeni_df)):  # print(f"{i}. postanın wl5 e kadar olan alan",a)
@@ -110,10 +140,12 @@ for i in range(len(yeni_df)):  # print(f"{i}. postanın wl5 e kadar olan alan",a
     liste_ps=pd.Series(liste)
     carpim=SM*liste_ps
     a=sum(carpim)
-    T = 5.820
     b=2/3*T/4*a
     WL5Alan.append(b)
 WL5Alan_PDS=pd.Series(WL5Alan)
+print("WL5 0. POSTA ",WL5Alan_PDS.loc[0])
+print("WL5 74. POSTA ",WL5Alan_PDS.loc[74])
+print("WL5 148. POSTA ",WL5Alan_PDS.loc[148])
 
 WL6Alan=[]
 SM=[1,4,2,4,2,4,1]
@@ -124,18 +156,21 @@ for i in range(len(yeni_df)):  # print(f"{i}. postanın wl6 e kadar olan alan",a
     liste_ps=pd.Series(liste)
     carpim=SM*liste_ps
     a=sum(carpim)
-    T = 5.820
     b=2/3*T/4*a
 
     WL6Alan.append(b)
 WL6Alan_PDS=pd.Series(WL6Alan)
-
+print("WL6 0. POSTA ",WL6Alan_PDS.loc[0])
+print("WL6 74. POSTA ",WL6Alan_PDS.loc[74])
+print("WL6 148. POSTA ",WL6Alan_PDS.loc[148])
 
 
 
 
 alanlar = pd.concat([WL1Alan_PDS, WL2Alan_PDS, WL3Alan_PDS, WL4Alan_PDS, WL5Alan_PDS, WL6Alan_PDS], axis=1)
 alanlar.columns = ['WL1Alan_PDS', 'WL2Alan_PDS', 'WL3Alan_PDS', 'WL4Alan_PDS', 'WL5Alan_PDS', 'WL6Alan_PDS']
+#print(alanlar.loc[76])
+
 
 def moment_kolu():
     MK = list(range(-(len(yeni_df)-1)// 2, 0))  + list(range((len(yeni_df)+1)//2))
